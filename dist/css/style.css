@@ -10,8 +10,13 @@ img {
   height: 100vh;
 }
 
+.container {
+  height: 100vh;
+  position: relative;
+}
+
 nav {
-  position: fixed;
+  position: absolute;
   top: 0;
 }
 
@@ -21,9 +26,5 @@ nav ul {
   flex-direction: row;
   align-items: center;
   width: 100vw;
-}
-
-body {
-  overflow-y: hidden;
 }
 /*# sourceMappingURL=style.css.map */

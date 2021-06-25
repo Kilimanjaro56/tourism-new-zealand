@@ -9,9 +9,13 @@ img{
 .view{
     height: 100vh;
 }
+.container{
+    height: 100vh;
+    position: relative;
+}
 
 nav{
-    position: fixed;
+    position: absolute;
     top: 0;
     ul{
         display: flex;
@@ -20,8 +24,4 @@ nav{
         align-items: center;
         width: 100vw;
     }
-}
-
-body{
-    overflow-y: hidden;
 }
