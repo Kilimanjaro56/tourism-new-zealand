@@ -1,0 +1,27 @@
+img{
+    width:2em;
+}
+
+.hide-mobile-view{
+    display: none;
+}
+
+.view{
+    height: 100vh;
+}
+
+nav{
+    position: fixed;
+    top: 0;
+    ul{
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        align-items: center;
+        width: 100vw;
+    }
+}
+
+body{
+    overflow-y: hidden;
+}
