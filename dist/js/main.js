@@ -1,5 +1,7 @@
 let userName = document.getElementById('#nameInput');
 let userParty = document.getElementById('#partyInput');
+let userEmail = document.getElementById('#emailInput');
+let userDates = document.getElementById('#date-picker');
 
 
 function assignUserInputsToVariables(){
@@ -15,21 +17,25 @@ function assignUserInputsToVariables(){
         userEmail = $('#emailInput').val();
         console.log(userEmail)
     })
+    $('#date-picker').click(function(){
+    })
 }
 assignUserInputsToVariables();
 
 
-        // is called by the picker closing event. Is passed three arguments, an array of Date objects,
-        // a string representing the selected dates in human readable format as defined by the options,
-        // the datepickr object attached to the specific input that triggered the event
-        function displaySelectedDates(selection, strings, instance) {
-            console.log(selection[0].toString()); // get the first element in the array of dates and stringify it into the console
-            $("#start").html(strings); // insert the string representing the selceted dates into the DOM
-        }
-        $(".datepicker").flatpickr({ // activate the plugin on this element
-            mode: "range",    // set it to range mode to allow selection of a range of dates
-            dateFormat: "F j, Y", // specify the format that the date strings should have
-            minDate: "today", // specify the earliest date allowed
-            // maxDate: new Date().fp_incr(14), // specify the latest date allowed (14 days from now)
-            onClose: displaySelectedDates, // whent he picker is closed, execute a callback function
-        });
+const dateOptions = {
+    // altInput: true,
+    // altFormat: "F j, Y",
+    dateFormat: "F j, Y",
+    maxDate: new Date().fp_incr(14),
+    mode: "range",    
+    onClose: function(dates, string, picker){
+        $('#selected-dates').text(string);
+        userDates = $('#date-picker').val();
+        console.log(userDates)
+        
+    }
+}
+
+$('#date-picker').flatpickr(dateOptions);
+
