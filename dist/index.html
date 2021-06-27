@@ -5,13 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script defer src="js/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
     
     <link rel="stylesheet" href="css/style.css">
+    
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script defer src="js/main.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -43,10 +47,23 @@
                     <li>Hindi</li>
                     <li>More...</li>
                 </ul>
+                
+                
+                
                 <a href="#date-page">Continue</a>
             </section>
             <section id="date-page" class="view">
                 <h3>Enter Your Details to Continue</h3>
+                <input type="text" name="nameInput" id="nameInput" placeholder="Your Name" required>
+                <button id="nameButton">Clicky CLick</button>
+                
+                <input type="number" name="partyInput" id="partyInput" placeholder="Number of People" required>
+                <button id="partyButton">Clicky CLick</button>
+                <div>
+                    <input class="datepicker" placeholder="Select Dates"></input>
+                    <p>Selected Dates: <span id="start"></span></p>
+                </div>
+                
                 <a href="#location-page-one">Continue</a>
             </section>
             <section id="location-page-one" class="view">
@@ -63,6 +80,8 @@
                 <h3>Your Booking Details</h3>
                 <h4>Please Enter Your Email</h4>
                 <p>We will send your booking information here once payment is complete.</p>
+                <input type="text" name="emailInput" id="emailInput" placeholder="Your Email" required>
+                <button id="emailButton">Clicky CLick</button>
                 <h4>- Or Check Out With -</h4>
                 <a href="#payment-form-page">Continue</a>
             </section>

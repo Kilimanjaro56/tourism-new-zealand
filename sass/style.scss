@@ -6,17 +6,25 @@ img{
     display: none;
 }
 
-.view{
-    height: 100vh;
+section{
+    height: 92vh;
+    padding-top: 5em;
+    // margin-top: 5em;
 }
-.container{
-    height: 100vh;
-    position: relative;
-}
+// #home{
+// }
 
-nav{
-    position: absolute;
+body{
+    overflow-y: hidden;
+}
+    
+    nav{
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 100vw;
+    height: 7vh;
+    background-color: black;
     ul{
         display: flex;
         justify-content: space-around;
