@@ -1,8 +1,7 @@
-let userName = document.getElementById('#nameInput');
-let userParty = document.getElementById('#partyInput');
-let userEmail = document.getElementById('#emailInput');
-let userDates = document.getElementById('#date-picker');
-
+const userName = document.getElementById('#nameInput');
+const userParty = document.getElementById('#partyInput');
+const userEmail = document.getElementById('#emailInput');
+const userDates = document.getElementById('#date-picker');
 
 function assignUserInputsToVariables(){
     $('#nameButton').click(function(){
@@ -16,8 +15,6 @@ function assignUserInputsToVariables(){
     $('#emailButton').click(function(){
         userEmail = $('#emailInput').val();
         console.log(userEmail)
-    })
-    $('#date-picker').click(function(){
     })
 }
 assignUserInputsToVariables();
@@ -39,3 +36,21 @@ const dateOptions = {
 
 $('#date-picker').flatpickr(dateOptions);
 
+var map = L.map('mapid').setView([-42.032974, 173.320313], 4);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+var osm=new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+
+L.Control.geocoder().addTo(map);
+L.Control.geocoder().addTo(map);
+
+const firstLocation = document.getElementById('#testingforr').val();
+const endLocation = document.getElementById('#testingforrr').val();
+
+L.Routing.control({
+    waypoints: [
+      L.latLng(firstLocation),
+      L.latLng(endLocation)
+    ]
+  }).addTo(map);

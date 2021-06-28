@@ -7,8 +7,8 @@ img {
 }
 
 section {
-  height: 92vh;
-  padding-top: 5em;
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 body {
@@ -22,6 +22,7 @@ nav {
   width: 100vw;
   height: 7vh;
   background-color: black;
+  z-index: 999;
 }
 
 nav ul {
@@ -30,5 +31,10 @@ nav ul {
   flex-direction: row;
   align-items: center;
   width: 100vw;
+}
+
+#mapid {
+  width: 30em;
+  height: 30em;
 }
 /*# sourceMappingURL=style.css.map */
