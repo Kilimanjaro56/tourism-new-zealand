@@ -63,7 +63,7 @@
                 <h3>Enter Your Details to Continue</h3>
                 <input type="text" name="nameInput" id="nameInput" placeholder="Your Name" required>
                 
-                <input type="number" name="partyInput" id="partyInput" placeholder="Number of People" required>
+                <input type="number" name="partyInput" id="partyInput" max="6" placeholder="Number of People" required>
                 <div>
                     <input type="text" id="date-picker" placeholder="Select Date(s)">
                     <p>Selected Dates: <span id="selected-dates"></span>
@@ -79,9 +79,10 @@
                     <option selected disabled>Arrival Location</option>
                   </select>
                 <div id='map'></div>
-                <a href="#all-vehicle-page">Continue</a>
+                <a id="start-filtering-output" href="#all-vehicle-page">Continue</a>
             </section>
             <section id="all-vehicle-page" class="view">
+                <div id="vehicle-display"></div>
                 <a href="#chosen-vehicle-page">Continue</a>
             </section>
             <section id="chosen-vehicle-page" class="view">

@@ -11,6 +11,7 @@ const vehicles =[
         minDays:1,
         maxDays:5,
         per100KM:3.7,
+        imgId:"motorcycle",
     },
     {
         type: "Small Car",
@@ -19,6 +20,7 @@ const vehicles =[
         minDays:1,
         maxDays:10,
         per100KM:8.5,
+        imgId:"small_car",
     },
     {
         type: "Large Car",
@@ -27,6 +29,7 @@ const vehicles =[
         minDays:3,
         maxDays:10,
         per100KM:9.7,
+        imgId:"large_car",
     },
     {
         type: "Motor Home",
@@ -35,6 +38,7 @@ const vehicles =[
         minDays:2,
         maxDays:15,
         per100KM:17,
+        imgId:"motorhome",
     }
 ]
 
@@ -149,6 +153,8 @@ function init() {
     });
    routeControl.addTo(map);
    calculateDistance();
+   displayVehicles(vehicles);
+
 };
 
 function initDropdowns() {
@@ -233,5 +239,43 @@ function arrivalChange() {
     };
     mapRouting();
 };
+
+function displayVehicles(vehiclesArray){
+    let html =``
+   for( const vehicle of vehiclesArray){
+        html += ` <img id="${vehicle.imgId}_vehicle" src="../assets/img/${vehicle.imgId}.png">`
+    }
+    $('#vehicle-display').html(html);
+    addFilterListener();
+}
+
+function addFilterListener(){
+    $('#start-filtering-output').click(function(){
+        filterUserParty();
+    })
+}
+function filterUserParty(){
+    if(userParty === 6){
+        $('#motorhome_vehicle').show();
+        $('#large_car_vehicle').hide();
+        $('#small_car_vehicle').hide();
+        $('#motorcycle_vehicle').hide();
+    }else if(userParty >= 3 && userParty <= 5){
+        $('#motorhome_vehicle').show();
+        $('#large_car_vehicle').show();
+        $('#small_car_vehicle').hide();
+        $('#motorcycle_vehicle').hide();
+    }else if(userParty  === 2){
+        $('#motorhome_vehicle').show();
+        $('#large_car_vehicle').show();
+        $('#small_car_vehicle').show();
+        $('#motorcycle_vehicle').hide();
+    }else{
+        $('#motorhome_vehicle').show();
+        $('#large_car_vehicle').show();
+        $('#small_car_vehicle').show();
+        $('#motorcycle_vehicle').show();
+    }
+}
 
 init();
