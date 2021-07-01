@@ -12,6 +12,7 @@ const vehicles =[
         maxDays:5,
         per100KM:3.7,
         imgId:"motorcycle",
+        arrayId:0,
     },
     {
         type: "Small Car",
@@ -21,6 +22,7 @@ const vehicles =[
         maxDays:10,
         per100KM:8.5,
         imgId:"small_car",
+        arrayId:1,
     },
     {
         type: "Large Car",
@@ -30,6 +32,7 @@ const vehicles =[
         maxDays:10,
         per100KM:9.7,
         imgId:"large_car",
+        arrayId:2,
     },
     {
         type: "Motor Home",
@@ -39,6 +42,7 @@ const vehicles =[
         maxDays:15,
         per100KM:17,
         imgId:"motorhome",
+        arrayId:3,
     }
 ]
 
@@ -256,10 +260,11 @@ function endChange() {
 function displayVehicles(vehiclesArray){
     let html =``
    for( const vehicle of vehiclesArray){
-        html += ` <img id="${vehicle.imgId}_vehicle" data-name="${vehicle.name}" src="../assets/img/${vehicle.imgId}.png">`
+        html += ` <img id="${vehicle.imgId}_vehicle" src="../assets/img/${vehicle.imgId}.png" data-id="${vehicle.arrayId}">`
     }
     $('#vehicle-display').html(html);
     addFilterListener();
+    addClickListnersToVehicles();
 }
 
 function addFilterListener(){
@@ -360,6 +365,7 @@ $('.edit-button').click(function(){
     userParty = 0;
     userEmail = "";
     userDates = 0;
+    selectedVehicle = {};
 
     assignUserInputsToVariables();
     
@@ -444,6 +450,14 @@ nameInput.addEventListener('blur', checkName);
 partyInput.addEventListener('blur', checkParty);
 
 
+let selectedVehicle;
+
+function addClickListnersToVehicles(){
+    $("#vehicle-display img").click(function(){
+    const selectedVehicleId = $(this).data('id');
+    selectedVehicle =  vehicles[selectedVehicleId];
+   });
+}
 
 
 
