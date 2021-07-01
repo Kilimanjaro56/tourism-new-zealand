@@ -200,11 +200,13 @@ function assignUserInputsToVariables(){
     })
 };
 
+let travelDistance;
+
 function calculateDistance(){
     routeControl.on('routesfound', (e) => {
         let getDistanceData = e.routes[0].summary.totalDistance;
         const distanceInKm = Math.floor(getDistanceData / 1000);
-        // console.log(distanceInKm)
+        travelDistance = distanceInKm
     });
 };
 
@@ -456,10 +458,22 @@ function addClickListnersToVehicles(){
     $("#vehicle-display img").click(function(){
     const selectedVehicleId = $(this).data('id');
     selectedVehicle =  vehicles[selectedVehicleId];
-   });
-}
+    $('#vehicle-display img').click(calculateTotalPrices());
+});
+
+};
+
+let estimatedFuel;
+let rentalCost;
 
 
+function calculateTotalPrices(){
+    estimatedFuel = (travelDistance / 100) * selectedVehicle.per100KM
+    console.log(estimatedFuel + "L")
+
+    rentalCost = (userDaysNumber * selectedVehicle.pricePerDay)
+    console.log(rentalCost)
+};
 
 
 init();
