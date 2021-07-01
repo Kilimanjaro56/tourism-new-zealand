@@ -126,18 +126,27 @@ const locations = {
 };
 
 const dateOptions = {
+    mode: "range", 
     // altInput: true,
     // altFormat: "F j, Y",
     dateFormat: "F j, Y",
-    maxDate: new Date().fp_incr(14),
-    mode: "range",    
+    maxDate: new Date().fp_incr(50),
+    // inline: true,   
     
-    onClose: function(dates, string, picker){
+    onChange: function(dates, string, picker){
         $('#selected-dates').text(string);
         userDates = $('#date-picker').val();
         
         calcDateRange();
+        
+        $('#selected-dates').text(string);
+        if (dates[0]) {
+            picker.set('maxDate', new Date(dates[0]).fp_incr(15));
+        } else {
+            picker.set('maxDate', '');
+        }
     }
+
 }
 
 const wayPoints = [];
@@ -152,6 +161,9 @@ function init() {
        router: L.Routing.mapbox('pk.eyJ1Ijoia2lsaW1hbmphcm8iLCJhIjoiY2tjMDJpMDc2MHFoeDJ6cjVzajF6YmFiZSJ9.r9QBATh6AyTUkCLNjykuxw'),
     });
    routeControl.addTo(map);
+
+   $('#vehicle-error').hide();
+
    calculateDistance();
    displayVehicles(vehicles);
 
@@ -165,21 +177,21 @@ function initDropdowns() {
       option2.value = key;
       option1.text = locations[key].name;
       option2.text = locations[key].name;
-      $('#departure-location').append(option1);
-      $('#arrival-location').append(option2);
+      $('#start-location').append(option1);
+      $('#end-location').append(option2);
     });
-    $('#departure-location').change(departureChange);
-    $('#arrival-location').change(arrivalChange);
+    $('#start-location').change(endChange);
+    $('#end-location').change(startChange);
 };
 
 function assignUserInputsToVariables(){
-    $('#nameInput').keyup(function(){
+    $('.next').click(function(){
         userName = $('#nameInput').val();
     })
-    $('#partyInput').keyup(function(){
+    $('.next').click(function(){
         userParty = parseInt($('#partyInput').val());
     })
-    $('#emailInput').click(function(){
+    $('.next').click(function(){
         userEmail = $('#emailInput').val();
     })
 };
@@ -188,14 +200,15 @@ function calculateDistance(){
     routeControl.on('routesfound', (e) => {
         let getDistanceData = e.routes[0].summary.totalDistance;
         const distanceInKm = Math.floor(getDistanceData / 1000);
-        // $('#length-of-trip-km').text(`${distanceInKm}KM`);
+        // console.log(distanceInKm)
     });
 };
 
+let userDaysNumber
 
 function calcDateRange(){
     let daysInRange = document.getElementsByClassName('inRange');
-    let numberOfDays = daysInRange.length + 1;
+    userDaysNumber = daysInRange.length + 1;
 };
 
 $('#date-picker').flatpickr(dateOptions);
@@ -223,7 +236,7 @@ function mapRouting() {
     routeControl.setWaypoints(wayPoints);
 };
 
-function departureChange() {
+function startChange() {
     const city = locations[this.value];
     wayPoints[0] = {
       lat: city.lat,
@@ -231,7 +244,7 @@ function departureChange() {
     };
     mapRouting();
 };
-function arrivalChange() {
+function endChange() {
     const city = locations[this.value];
     wayPoints[1] = {
       lat: city.lat,
@@ -243,7 +256,7 @@ function arrivalChange() {
 function displayVehicles(vehiclesArray){
     let html =``
    for( const vehicle of vehiclesArray){
-        html += ` <img id="${vehicle.imgId}_vehicle" src="../assets/img/${vehicle.imgId}.png">`
+        html += ` <img id="${vehicle.imgId}_vehicle" data-name="${vehicle.name}" src="../assets/img/${vehicle.imgId}.png">`
     }
     $('#vehicle-display').html(html);
     addFilterListener();
@@ -252,7 +265,10 @@ function displayVehicles(vehiclesArray){
 function addFilterListener(){
     $('#start-filtering-output').click(function(){
         filterUserParty();
-    })
+        filterUserDays();
+        filterErrorMessage();
+    });
+    $('#location-confirm').click(validateLocations())
 }
 function filterUserParty(){
     if(userParty === 6){
@@ -270,12 +286,166 @@ function filterUserParty(){
         $('#large_car_vehicle').show();
         $('#small_car_vehicle').show();
         $('#motorcycle_vehicle').hide();
-    }else{
+    }else if(userParty === 1){
         $('#motorhome_vehicle').show();
         $('#large_car_vehicle').show();
         $('#small_car_vehicle').show();
         $('#motorcycle_vehicle').show();
     }
 }
+function filterUserDays(){
+    vehicleErrorMessage.style.display = "none";
+    if(userDaysNumber === 1){
+        $('#motorhome_vehicle').hide();
+        $('#large_car_vehicle').hide();
+    }else if(userDaysNumber === 2){
+        $('#large_car_vehicle').hide();
+    }else if(userDaysNumber >= 6 && userDaysNumber <= 10){
+        $('#motorcycle_vehicle').hide();
+    }else if(userDaysNumber >= 11 && userDaysNumber <= 15){
+        $('#large_car_vehicle').hide();
+        $('#small_car_vehicle').hide();
+        $('#motorcycle_vehicle').hide();
+    }else{
+        $('#motorhome_vehicle').hide();
+        $('#large_car_vehicle').hide();
+        $('#small_car_vehicle').hide();
+        $('#motorcycle_vehicle').hide();
+        vehicleErrorMessage.style.display = "inline";
+    }
+}
+function filterErrorMessage(){
+    vehicleErrorMessage.style.display = "none";
+    if(userParty === 6 && userDaysNumber === 1){
+        $('#vehicle-error-message').show();
+        $('#motorhome_vehicle').hide();
+        $('#large_car_vehicle').hide();
+        $('#small_car_vehicle').hide();
+        $('#motorcycle_vehicle').hide();
+    }else if(userParty === 5 && userDaysNumber === 1){
+        $('#vehicle-error-message').show();
+        $('#motorhome_vehicle').hide();
+        $('#large_car_vehicle').hide();
+        $('#small_car_vehicle').hide();
+        $('#motorcycle_vehicle').hide();
+    }else if(userParty === 4 && userDaysNumber === 1){
+        $('#vehicle-error-message').show();
+        $('#motorhome_vehicle').hide();
+        $('#large_car_vehicle').hide();
+        $('#small_car_vehicle').hide();
+        $('#motorcycle_vehicle').hide();
+    }else if(userParty === 3 && userDaysNumber === 1){
+        $('#vehicle-error-message').show();
+        $('#motorhome_vehicle').hide();
+        $('#large_car_vehicle').hide();
+        $('#small_car_vehicle').hide();
+        $('#motorcycle_vehicle').hide();
+    }
+}
+function validateLocations(){
+    $('#location-confirm').click(function(){
+        if($('#start-location').val() === null || $('#end-location').val() === null){
+            locationsErrorMessage.style.display = "inline";
+            console.log("Error")
+        }else{
+            locationsErrorMessage.style.display = "none";
+            console.log("NoError")
+        }
+        })
+}
+
+
+$('.edit-button').click(function(){
+    userName = "";
+    userParty = 0;
+    userEmail = "";
+    userDates = 0;
+
+    assignUserInputsToVariables();
+    
+})
+
+//Error Inits
+
+const locationsErrorMessage = document.querySelector("#locations-error-message");
+locationsErrorMessage.style.display = "none";
+
+const vehicleErrorMessage = document.querySelector("#vehicle-error-message");
+vehicleErrorMessage.style.display = "none";
+
+
+const form = document.querySelector('form');
+
+const emailInput = document.querySelector("#emailInput");
+const emailErrorMessage = document.querySelector("#email-error-message");
+emailErrorMessage.style.display = "none";
+
+const nameInput = document.querySelector("#nameInput");
+const nameErrorMessage = document.querySelector("#name-error-message");
+nameErrorMessage.style.display = "none";
+
+const partyInput = document.querySelector("#partyInput");
+const partyErrorMessage = document.querySelector("#party-error-message");
+partyErrorMessage.style.display = "none";
+let isError;
+
+function checkEmail() {
+    const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if(!emailRegex.test(emailInput.value)) {
+        emailErrorMessage.style.display = "inline";
+        emailInput.style.background = "red";
+        isError = true;
+    } else {
+        emailErrorMessage.style.display = "none";
+    }
+}
+
+function checkName() {
+    const nameRegex = /^[a-z ,.'-]+$/i
+    if(!nameRegex.test(nameInput.value)) {
+        nameErrorMessage.style.display = "inline";
+        nameInput.style.background = "red";
+        isError = true;
+    } else {
+        nameInput.style.background = "white";
+        nameErrorMessage.style.display = "none";
+    }
+}
+function checkParty() {
+    const partyRegex = /^[1-6]*$/
+    if(!partyRegex.test(partyInput.value)) {
+        partyErrorMessage.style.display = "inline";
+        partyInput.style.background = "red";
+        isError = true;
+       
+    } else {
+        partyInput.style.background = "white";
+        partyErrorMessage.style.display = "none";
+    }
+}
+
+function validate(event) {
+    event.preventDefault();
+    isError = false;
+    checkEmail();
+    checkName();
+    checkParty();
+    if (isError) {
+        console.log("error");
+        // no submit
+    } else {
+        console.log("no error");
+    }
+}
+
+form.addEventListener('submit', validate);
+emailInput.addEventListener('blur', checkEmail);
+nameInput.addEventListener('blur', checkName);
+partyInput.addEventListener('blur', checkParty);
+
+
+
+
+
 
 init();

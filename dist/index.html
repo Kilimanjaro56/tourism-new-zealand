@@ -55,37 +55,55 @@
                     <li>More...</li>
                 </ul>
                 
-                
-                
                 <a href="#date-page">Continue</a>
+                
             </section>
             <section id="date-page" class="view">
-                <h3>Enter Your Details to Continue</h3>
-                <input type="text" name="nameInput" id="nameInput" placeholder="Your Name" required>
-                
-                <input type="number" name="partyInput" id="partyInput" max="6" placeholder="Number of People" required>
-                <div>
-                    <input type="text" id="date-picker" placeholder="Select Date(s)">
-                    <p>Selected Dates: <span id="selected-dates"></span>
-                </div>
-                
-                <a href="#location-page-one">Continue</a>
+                <form>
+                    <h3>Enter Your Details to Continue</h3>
+                    <div class="formgroup">
+                        <input type="text" name="nameInput" id="nameInput" placeholder="Your Name" required>
+                        <span class="error-message" id="name-error-message"
+                              >Error: Please enter a valid name</span
+                            >
+                        <input type="number" label="partyInput" id="partyInput" min="1" max="6" placeholder="Number of People" required>
+                        <span class="error-message" id="party-error-message"
+                              >Error: Please enter a valid number (Maximum of 6 people)</span
+                            >
+                                </div>
+                    <div>
+                        <input type="text" id="date-picker" placeholder="Select Date(s)" required>
+                        <p>Selected Dates: <span id="selected-dates"></span>
+                    </div>
+                    
+                    <a  class="next" href="#location-page-one">Continue</a>
+                </form>
             </section>
             <section id="location-page-one" class="view">
-                <select name="depature-location" id="departure-location">
-                    <option selected disabled>Departure Location</option>
+                <button class="edit-button"><a href="#date-page">Edit</a></button>
+                <select name="start-location" id="start-location">
+                    <option selected disabled>Start Location</option>
                   </select>
-                  <select name="arrival-location" id="arrival-location">
-                    <option selected disabled>Arrival Location</option>
+                  <select name="end-location" id="end-location">
+                    <option selected disabled>End Location</option>
                   </select>
-                <div id='map'></div>
-                <a id="start-filtering-output" href="#all-vehicle-page">Continue</a>
+                  <button id="location-confirm">Confirm</button>
+                  <span class="error-message" id="locations-error-message"
+                  >Error: Please select start and end locations</span
+                  >
+                  <div id='map'></div>
+              <a class="next" id="start-filtering-output" href="#all-vehicle-page">Continue</a>
+            </div>
             </section>
             <section id="all-vehicle-page" class="view">
+                <button class="edit-button"><a href="#date-page">Edit</a></button>
                 <div id="vehicle-display"></div>
+                <span id="vehicle-error-message"><p >No vehicles found. Please review your information and try again.</p></span>
+                <button class="edit-button"><a href="#date-page">Edit</a></button>
                 <a href="#chosen-vehicle-page">Continue</a>
             </section>
             <section id="chosen-vehicle-page" class="view">
+                <button class="edit-button"><a href="#date-page">Edit</a></button>
                 <p>Please note “Total Rental Cost” does not include fuel consuption. Fuel is the responsibility of the customer and is not included in our booking service.</p>
                 <a href="#booking-details-page">Continue</a>
             </section>
@@ -93,10 +111,14 @@
                 <h3>Your Booking Details</h3>
                 <h4>Please Enter Your Email</h4>
                 <p>We will send your booking information here once payment is complete.</p>
-                <input type="text" name="emailInput" id="emailInput" placeholder="Your Email" required>
-                <button id="emailButton">Clicky CLick</button>
+                <div class="formgroup"><input type="text" name="emailInput" id="emailInput" placeholder="Your Email" required>
+                    <span class="error-message" id="email-error-message"
+                    >Error: Please enter a valid address (i.e. myemail@example.com)</span
+                  ></div>
+                <button  id="emailButton">Confirm</button>
+                <button class="edit-button"><a href="#date-page">Edit</a></button>
                 <h4>- Or Check Out With -</h4>
-                <a href="#payment-form-page">Continue</a>
+                <a class="next" href="#payment-form-page">Continue</a>
             </section>
             <section id="payment-form-page" class="view">
                 <a href="#booking-confirmation-page">Continue</a>
