@@ -189,11 +189,12 @@ function initDropdowns() {
 };
 
 function assignUserInputsToVariables(){
-    $('.next').click(function(){
+    $('#nameInput').keyup(function(){
         userName = $('#nameInput').val();
     })
-    $('.next').click(function(){
+    $('#partyInput').keyup(function(){
         userParty = parseInt($('#partyInput').val());
+        
     })
     $('.next').click(function(){
         userEmail = $('#emailInput').val();
@@ -215,6 +216,7 @@ let userDaysNumber
 function calcDateRange(){
     let daysInRange = document.getElementsByClassName('inRange');
     userDaysNumber = daysInRange.length + 1;
+    firstHtmlDetailsInject();
 };
 
 $('#date-picker').flatpickr(dateOptions);
@@ -241,21 +243,26 @@ L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{e
 function mapRouting() {
     routeControl.setWaypoints(wayPoints);
 };
+let endLocation;
+let startLocation;
 
 function startChange() {
     const city = locations[this.value];
     wayPoints[0] = {
-      lat: city.lat,
-      lng: city.lng,
+        lat: city.lat,
+        lng: city.lng,
     };
     mapRouting();
+    startLocation = locations[this.value].name;
 };
 function endChange() {
     const city = locations[this.value];
+    
     wayPoints[1] = {
-      lat: city.lat,
-      lng: city.lng,
+        lat: city.lat,
+        lng: city.lng,
     };
+    endLocation = locations[this.value].name;
     mapRouting();
 };
 
@@ -268,7 +275,6 @@ function displayVehicles(vehiclesArray){
     addFilterListener();
     addClickListnersToVehicles();
 }
-
 function addFilterListener(){
     $('#start-filtering-output').click(function(){
         filterUserParty();
@@ -276,6 +282,8 @@ function addFilterListener(){
         filterErrorMessage();
     });
     $('#location-confirm').click(validateLocations())
+    
+    
 }
 function filterUserParty(){
     if(userParty === 6){
@@ -349,6 +357,7 @@ function filterErrorMessage(){
         $('#motorcycle_vehicle').hide();
     }
 }
+$('#start-filtering-output').hide();
 function validateLocations(){
     $('#location-confirm').click(function(){
         if($('#start-location').val() === null || $('#end-location').val() === null){
@@ -357,8 +366,13 @@ function validateLocations(){
         }else{
             locationsErrorMessage.style.display = "none";
             console.log("NoError")
+            $('#start-filtering-output').show();
         }
+        
+        mainHtmlDetailsInject();
         })
+
+
 }
 
 
@@ -432,21 +446,21 @@ function checkParty() {
     }
 }
 
-function validate(event) {
-    event.preventDefault();
-    isError = false;
-    checkEmail();
-    checkName();
-    checkParty();
-    if (isError) {
-        console.log("error");
-        // no submit
-    } else {
-        console.log("no error");
-    }
-}
+// function validate(event) {
+//     event.preventDefault();
+//     isError = false;
+//     checkEmail();
+//     checkName();
+//     checkParty();
+//     if (isError) {
+//         console.log("error");
+//         // no submit
+//     } else {
+//         console.log("no error");
+//     }
+// }
 
-form.addEventListener('submit', validate);
+// form.addEventListener('submit', validate);
 emailInput.addEventListener('blur', checkEmail);
 nameInput.addEventListener('blur', checkName);
 partyInput.addEventListener('blur', checkParty);
@@ -473,7 +487,139 @@ function calculateTotalPrices(){
 
     rentalCost = (userDaysNumber * selectedVehicle.pricePerDay)
     console.log(rentalCost)
+    $('#start-total-calc').click(
+    showVehicleTotals());
+
 };
+
+function showVehicleTotals(){
+    let html = `<h5>Your Selection</h5>
+    <p>${selectedVehicle.type}: $${selectedVehicle.pricePerDay} <span>(per day)</span></p>
+    <p>Rental Cost: $${rentalCost}</p>
+    <p>Estimated Fuel Consumption: ${estimatedFuel}L</p>`
+    $('.your-vehicle-details').html(html)
+    lastHtmlDetailsInject();
+}
+function firstHtmlDetailsInject(){
+    let html = `<h5>Your Details</h5>
+    <p>${userName}</p>
+    <p>${userDates}</p>
+    <p>${userDaysNumber} day(s)</p>
+    <p>Number of People: ${userParty}</p>`
+
+
+        $("#first-html-details").click(function(){
+        $('#first-details').html(html)
+    })}
+    
+function mainHtmlDetailsInject(){
+        let html = ``
+        html = `<h5>Your Details</h5>
+    <p>${userName}</p>
+    <p>${userDates}</p>
+    <p>${userDaysNumber} day(s)</p>
+    <p>Number of People: ${userParty}</p>
+    <p>Start: ${startLocation}</p>
+    <p>End: ${endLocation}</p>`
+
+        $('#start-filtering-output').click(function(){
+        $("#your-details-one").html(html)
+    })
+}
+    
+function lastHtmlDetailsInject(){
+        let finaldetailshtml = `<h5>Your Details</h5>
+    <p>${userName}</p>
+    <p>${userDates}</p>
+    <p>${userDaysNumber} day(s)</p>
+    <p>Number of People: ${userParty}</p>
+    <p>Start: ${startLocation}</p>
+    <p>End: ${endLocation}</p>
+    <h5>Your Selection</h5>
+    <p>${selectedVehicle.type}: $${selectedVehicle.pricePerDay} <span>(per day)</span></p>
+    <p>Rental Cost: $${rentalCost}</p>
+    <p>Estimated Fuel Consumption: ${estimatedFuel}L</p>`
+
+        $("#start-total-calc").click(function(){
+        $('#last-details').html(finaldetailshtml)
+    })}
+
+
+
+    const paymentForm = document.querySelector('form');
+
+    const cardNumberInput = document.querySelector("#input-cardnumber");
+    const cardNumberErrorMessage = document.querySelector("#cardnumber-error-message");
+    cardNumberErrorMessage.style.display = "none";
+    
+    const expDateInput = document.querySelector("#input-expdate");
+    const expDateErrorMessage = document.querySelector("#expdate-error-message");
+    expDateErrorMessage.style.display = "none";
+    
+    const cvcInput = document.querySelector("#input-cvc");
+    const cvcErrorMessage = document.querySelector("#cvc-error-message");
+    cvcErrorMessage.style.display = "none";
+    
+    let hasError;
+    
+    
+    function validatePayment(event) {
+        event.preventDefault(); 
+        hasError = false;
+        checkCardNumber();
+        checkExpDate();
+        checkCvc();
+        if (hasError) {
+            console.log("error");
+        } else {
+            console.log("no error");
+            form.submit();
+        }
+    }
+    
+    function checkCardNumber() {
+        const cardNumberRegex = /^4[0-9]{12}(?:[0-9]{3})?$/;
+        if(!cardNumberRegex.test(cardNumberInput.value)) { 
+            cardNumberErrorMessage.style.display = "inline"; 
+            hasError = true; 
+        } else {
+            cardNumberErrorMessage.style.display = "none"; 
+    
+        }
+    }
+    
+    
+    function checkExpDate() {
+        const expRegex = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/;
+        if(!expRegex.test(expDateInput.value)) {
+            expDateErrorMessage.style.display = "inline";
+            hasError = true;
+        } else {
+            expDateErrorMessage.style.display = "none";
+        }
+    }
+    
+    
+    function checkCvc() {
+        const cvcRegex = /^[0-9]{3,4}$/;
+        if(!cvcRegex.test(cvcInput.value)) {
+            cvcErrorMessage.style.display = "inline";
+            hasError = true;
+        } else {
+            cvcErrorMessage.style.display = "none";
+        }
+    }
+    
+    
+    
+    paymentForm.addEventListener('submit', validatePayment);
+    
+    cardNumberInput.addEventListener('blur', checkCardNumber);
+    expDateInput.addEventListener('blur', checkExpDate);
+    cvcInput.addEventListener('blur', checkCvc);
+    
+    
+    
 
 
 init();
