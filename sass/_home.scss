@@ -1,0 +1,14 @@
+#home{
+    background-image: url(/assets/img/tourism_nz_splash.png);
+    background-size: cover;
+    background-position: 40% 0;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    a{
+        color: white;
+        
+    }
+}

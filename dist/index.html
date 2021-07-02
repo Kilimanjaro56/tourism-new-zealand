@@ -40,14 +40,25 @@
                     <li><a href="#home"><i class="fas fa-home"></i></a></li>
                     <li><img src="/assets/img/logo.png" alt=""></li>
                     <li class="hide-mobile-view">| $ NZD <i class="fas fa-angle-down"></i> |</li>
-                    <li><i class="fas fa-bars"></i></li>
+                    <li><i class="fas fa-bars" id="nav-bars"></i></li>
                 </ul>
             </nav>
+                <ul id="nav-items" >
+                    <div>
+                        <li class="show-mobile-view">| Language <i class="fas fa-angle-down"></i> |</li>
+                        <li class="show-mobile-view">| $ NZD <i class="fas fa-angle-down"></i> |</li>
+                    </div>
+                    <li><a href="https://www.newzealand.com/nz/covid-19-travel-safety-information/" target="blank">Covid-19 Information</a></li>
+                    <li><a href="https://www.newzealand.com/nz/" target="blank">Tourism New Zealand</a></li>
+                    <li><a href="https://www.instagram.com/purenewzealand/" target="blank">#DoSomethingNewNZ</a></li>
+                    <li><a href="https://www.newzealand.com/nz/utilities/frequently-asked-questions" target="blank">FAQs</a></li>
+                </ul>
+
         </header>
         <main>
             <section id="home" class="view">
                 <h1>Plan Your Adventure Today</h1>
-                <ul>
+                <ul class="hide-mobile-view">
                     <li id="make-bold">English</li>
                     <li>te reo Māori</li>
                     <li>Samoan</li>
@@ -59,7 +70,7 @@
                 
             </section>
             <section id="date-page" class="view">
-                <form>
+                <form id="details-form">
                     <h3>Enter Your Details to Continue</h3>
                     <div class="formgroup">
                         <input type="text" name="nameInput" id="nameInput" placeholder="Your Name" required>
@@ -70,13 +81,13 @@
                         <span class="error-message" id="party-error-message"
                               >Error: Please enter a valid number (Maximum of 6 people)</span
                             >
-                                </div>
+                    </div>
                     <div>
                         <input type="text" id="date-picker" placeholder="Select Date(s)" required>
                         <p>Selected Dates: <span id="selected-dates"></span>
                     </div>
                     
-                    <a  class="next" id="first-html-details" href="#location-page-one">Continue</a>
+                    <input class="next" id="first-html-details" type="submit" value="Continue"/>
                 </form>
             </section>
             <section id="location-page-one" class="view">
@@ -84,18 +95,18 @@
                 <button class="edit-button"><a href="#date-page">Edit</a></button>
                 <select name="start-location" id="start-location">
                     <option selected disabled>Start Location</option>
-                  </select>
-                  <select name="end-location" id="end-location">
+                </select>
+                 <select name="end-location" id="end-location">
                     <option selected disabled>End Location</option>
-                  </select>
+                </select>
                   <button id="location-confirm">Confirm</button>
-                  <span class="error-message" id="locations-error-message"
-                  >Error: Please select start and end locations</span
-                  >
+                    <span class="error-message" id="locations-error-message">Error: Please select start and end locations
+                    </span>
                   <div id='map'></div>
-              <a class="next" id="start-filtering-output" href="#all-vehicle-page">Continue</a>
-            </div>
-            </section>
+                    <a class="next" id="start-filtering-output" href="#all-vehicle-page">Continue</a>
+                </div>
+            </section>            
+
             <section id="all-vehicle-page" class="view">
                 <div id="your-details-one"></div>
                 <button class="edit-button"><a href="#date-page">Edit</a></button>
@@ -123,8 +134,8 @@
                     <h3>Your Booking Details</h3>
                     <div id="last-details"></div>
                 <button class="edit-button"><a href="#date-page">Edit</a></button>
-                <h4>- Or Check Out With -</h4>
                 <a class="next" href="#payment-form-page">Continue</a>
+                <h4>- Or Check Out With -</h4>
             </section>
             <section id="payment-form-page" class="view">
                 <form id="payment-form">
@@ -185,9 +196,10 @@
                       
                       <input id="submit-button" type="submit" value="Pay Now" />
                     </form>
-                <a href="#booking-confirmation-page">Continue</a>
             </section>
             <section id="booking-confirmation-page" class="view">
+                <div id="final-details"></div>
+                <p>Please note “Total Rental Cost” does not include fuel consuption. Fuel is the responsibility of the customer and is not included in our booking service.</p>
                 <a href="#home">Back to home</a>
             </section>
         </main>

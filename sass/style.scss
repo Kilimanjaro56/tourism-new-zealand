@@ -1,11 +1,20 @@
 @import"_payment";
-
+@import"_home";
+*{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
 img{
     width:5em;
 }
 
 .hide-mobile-view{
     display: none;
+}
+header{
+    min-height: 10vh;
+    position: absolute;
 }
 
 section{
@@ -19,31 +28,61 @@ body{
 }
     
     nav{
-        display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 7vh;
-    background-color: black;
+    background-color: #1B2223;
     z-index: 999;
+    color: white;
     ul{
         display: flex;
         justify-content: space-around;
-        flex-direction: row;
         align-items: center;
+        flex-direction: row;
         width: 100vw;
+        padding-left: 0;
+        list-style: none;
+    }
+    a{
+        color: white;
+    }
+}
+
+#nav-items{
+    background-color: #1B2223;
+    width: 100vw;
+    margin-top: 3.49em;
+    padding-top: 1em;
+    height: 15em;
+    text-align: center;
+    text-decoration: none;
+    list-style-type: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    div {
+        display: flex;
+        justify-content: space-around;
+        
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        li{
+            margin: 0 3em;
+        }
+    }
+    a{
+        color: white;
+        text-decoration: none;
     }
 }
 
 .view{
     padding-top: 5em;
 }
-
-// #mapid, #mapid2, #mapid3{
-//     width: 30em;
-//     height: 30em;
-// }
 
 
 #map {
@@ -85,4 +124,16 @@ body{
 }
 input:nth-child(1) {
     margin-bottom: 10px;
+}
+
+
+.hide{
+    visibility: hidden;
+}
+.show{
+    visibility: visible;
+}
+
+.showSelected{
+    border: 5px black dotted;
 }

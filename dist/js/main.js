@@ -2,11 +2,13 @@ let userName = document.getElementById('#nameInput');
 let userParty = document.getElementById('#partyInput');
 let userEmail = document.getElementById('#emailInput');
 let userDates = document.getElementById('#date-picker');
+const vehicleFilterButton = document.querySelector('#start-total-calc');
 
 const vehicles =[
     {
         type: "Motorbike",
-        people:1,
+        minPeople:1,
+        maxPeople:1,
         pricePerDay: 109,
         minDays:1,
         maxDays:5,
@@ -16,7 +18,8 @@ const vehicles =[
     },
     {
         type: "Small Car",
-        people:[1, 2],
+        minpeople:1,
+        maxpeople:2,
         pricePerDay:129,
         minDays:1,
         maxDays:10,
@@ -26,7 +29,8 @@ const vehicles =[
     },
     {
         type: "Large Car",
-        people:[1, 5],
+        minPeople:1,
+        maxPeople:5,
         pricePerDay:144,
         minDays:3,
         maxDays:10,
@@ -36,7 +40,8 @@ const vehicles =[
     },
     {
         type: "Motor Home",
-        people:[1, 6],
+        minPeople:1,
+        maxPeople:6,
         pricePerDay:200,
         minDays:2,
         maxDays:15,
@@ -169,7 +174,7 @@ function init() {
    $('#vehicle-error').hide();
 
    calculateDistance();
-   displayVehicles(vehicles);
+   addFilterListener();
 
 };
 
@@ -194,10 +199,10 @@ function assignUserInputsToVariables(){
     })
     $('#partyInput').keyup(function(){
         userParty = parseInt($('#partyInput').val());
-        
     })
-    $('.next').click(function(){
+    $('#emailInput').keyup(function(){
         userEmail = $('#emailInput').val();
+        finalHtmlDetailsInject();
     })
 };
 
@@ -272,91 +277,52 @@ function displayVehicles(vehiclesArray){
         html += ` <img id="${vehicle.imgId}_vehicle" src="../assets/img/${vehicle.imgId}.png" data-id="${vehicle.arrayId}">`
     }
     $('#vehicle-display').html(html);
-    addFilterListener();
+
     addClickListnersToVehicles();
 }
 function addFilterListener(){
     $('#start-filtering-output').click(function(){
-        filterUserParty();
-        filterUserDays();
+        filterVehicles();
         filterErrorMessage();
+        console.log('NEXT TO FILTERED')
     });
     $('#location-confirm').click(validateLocations())
-    
-    
 }
-function filterUserParty(){
-    if(userParty === 6){
-        $('#motorhome_vehicle').show();
-        $('#large_car_vehicle').hide();
-        $('#small_car_vehicle').hide();
-        $('#motorcycle_vehicle').hide();
-    }else if(userParty >= 3 && userParty <= 5){
-        $('#motorhome_vehicle').show();
-        $('#large_car_vehicle').show();
-        $('#small_car_vehicle').hide();
-        $('#motorcycle_vehicle').hide();
-    }else if(userParty  === 2){
-        $('#motorhome_vehicle').show();
-        $('#large_car_vehicle').show();
-        $('#small_car_vehicle').show();
-        $('#motorcycle_vehicle').hide();
-    }else if(userParty === 1){
-        $('#motorhome_vehicle').show();
-        $('#large_car_vehicle').show();
-        $('#small_car_vehicle').show();
-        $('#motorcycle_vehicle').show();
-    }
-}
-function filterUserDays(){
-    vehicleErrorMessage.style.display = "none";
-    if(userDaysNumber === 1){
-        $('#motorhome_vehicle').hide();
-        $('#large_car_vehicle').hide();
-    }else if(userDaysNumber === 2){
-        $('#large_car_vehicle').hide();
-    }else if(userDaysNumber >= 6 && userDaysNumber <= 10){
-        $('#motorcycle_vehicle').hide();
-    }else if(userDaysNumber >= 11 && userDaysNumber <= 15){
-        $('#large_car_vehicle').hide();
-        $('#small_car_vehicle').hide();
-        $('#motorcycle_vehicle').hide();
-    }else{
-        $('#motorhome_vehicle').hide();
-        $('#large_car_vehicle').hide();
-        $('#small_car_vehicle').hide();
-        $('#motorcycle_vehicle').hide();
-        vehicleErrorMessage.style.display = "inline";
+
+const filteredVehicles =[];
+function filterVehicles(){
+    for(const vehicle of vehicles){
+        if(
+            userDaysNumber >= vehicle.minDays &&
+            userDaysNumber <= vehicle.maxDays&&
+            userParty >= vehicle.minPeople &&
+            userParty <= vehicle.maxPeople
+        ){
+            filteredVehicles.push(vehicle)
+        }
     }
 }
 function filterErrorMessage(){
-    vehicleErrorMessage.style.display = "none";
-    if(userParty === 6 && userDaysNumber === 1){
-        $('#vehicle-error-message').show();
-        $('#motorhome_vehicle').hide();
-        $('#large_car_vehicle').hide();
-        $('#small_car_vehicle').hide();
-        $('#motorcycle_vehicle').hide();
-    }else if(userParty === 5 && userDaysNumber === 1){
-        $('#vehicle-error-message').show();
-        $('#motorhome_vehicle').hide();
-        $('#large_car_vehicle').hide();
-        $('#small_car_vehicle').hide();
-        $('#motorcycle_vehicle').hide();
-    }else if(userParty === 4 && userDaysNumber === 1){
-        $('#vehicle-error-message').show();
-        $('#motorhome_vehicle').hide();
-        $('#large_car_vehicle').hide();
-        $('#small_car_vehicle').hide();
-        $('#motorcycle_vehicle').hide();
-    }else if(userParty === 3 && userDaysNumber === 1){
-        $('#vehicle-error-message').show();
-        $('#motorhome_vehicle').hide();
-        $('#large_car_vehicle').hide();
-        $('#small_car_vehicle').hide();
-        $('#motorcycle_vehicle').hide();
+    if(filteredVehicles.length === 0){
+
+        vehicleErrorMessage.style.display = "inline";
+        $(vehicleFilterButton).hide();
+
+        console.log("EMPTY")
+
+    }else if(filteredVehicles.length > 0){
+
+        displayVehicles(filteredVehicles);
+
+        vehicleErrorMessage.style.display = "none";
+        $(vehicleFilterButton).show();
+        
+        console.log("WE GOT EM")
     }
+    
 }
+
+
 $('#start-filtering-output').hide();
 function validateLocations(){
     $('#location-confirm').click(function(){
@@ -372,20 +338,33 @@ function validateLocations(){
         mainHtmlDetailsInject();
         })
 
-
+}
+function addEventListeners(){
+    userParty.addEventListener('blur', assignUserInputsToVariables());
+    userName.addEventListener('blur', assignUserInputsToVariables());
 }
 
-
 $('.edit-button').click(function(){
-    userName = "";
-    userParty = 0;
-    userEmail = "";
-    userDates = 0;
+    // userName = "";
+    // userParty = 0;
+    // userEmail = "";
+    // userDates = 0;
     selectedVehicle = {};
-
+    
+    
     assignUserInputsToVariables();
+    filterVehicles();
+    // filterErrorMessage();
     
 })
+
+$('#nav-items').toggleClass("hide");
+$('#nav-bars').click(function(){
+    $('#nav-items').toggleClass("hide");
+    $('#nav-items').toggleClass("show");
+})
+
+
 
 //Error Inits
 
@@ -396,7 +375,7 @@ const vehicleErrorMessage = document.querySelector("#vehicle-error-message");
 vehicleErrorMessage.style.display = "none";
 
 
-const form = document.querySelector('form');
+const detailsForm = document.querySelector('#details-form');
 
 const emailInput = document.querySelector("#emailInput");
 const emailErrorMessage = document.querySelector("#email-error-message");
@@ -409,13 +388,13 @@ nameErrorMessage.style.display = "none";
 const partyInput = document.querySelector("#partyInput");
 const partyErrorMessage = document.querySelector("#party-error-message");
 partyErrorMessage.style.display = "none";
-let isError;
+
+let isDetailsError;
 
 function checkEmail() {
     const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if(!emailRegex.test(emailInput.value)) {
         emailErrorMessage.style.display = "inline";
-        emailInput.style.background = "red";
         isError = true;
     } else {
         emailErrorMessage.style.display = "none";
@@ -446,21 +425,21 @@ function checkParty() {
     }
 }
 
-// function validate(event) {
-//     event.preventDefault();
-//     isError = false;
-//     checkEmail();
-//     checkName();
-//     checkParty();
-//     if (isError) {
-//         console.log("error");
-//         // no submit
-//     } else {
-//         console.log("no error");
-//     }
-// }
+function validateDetails(event) {
+    event.preventDefault();
+    isDetailsError = false;
+    checkName();
+    checkParty();
+    if (isDetailsError) {
+        console.log("error");
+        // no submit
+    } else {
+        console.log("no error");
+        window.location ="#location-page-one"
+    }
+}
 
-// form.addEventListener('submit', validate);
+detailsForm.addEventListener('submit', validateDetails);
 emailInput.addEventListener('blur', checkEmail);
 nameInput.addEventListener('blur', checkName);
 partyInput.addEventListener('blur', checkParty);
@@ -469,12 +448,16 @@ partyInput.addEventListener('blur', checkParty);
 let selectedVehicle;
 
 function addClickListnersToVehicles(){
-    $("#vehicle-display img").click(function(){
-    const selectedVehicleId = $(this).data('id');
-    selectedVehicle =  vehicles[selectedVehicleId];
-    $('#vehicle-display img').click(calculateTotalPrices());
-});
 
+    $("#vehicle-display img").click(function(){
+        
+    const selectedVehicleId = $(this).addClass('showSelected').data('id');
+    selectedVehicle =  vehicles[selectedVehicleId];
+
+    $('#vehicle-display img').click(function(){
+        calculateTotalPrices();
+    });
+    })
 };
 
 let estimatedFuel;
@@ -482,7 +465,7 @@ let rentalCost;
 
 
 function calculateTotalPrices(){
-    estimatedFuel = (travelDistance / 100) * selectedVehicle.per100KM
+    estimatedFuel = Math.floor((travelDistance / 100) * selectedVehicle.per100KM)
     console.log(estimatedFuel + "L")
 
     rentalCost = (userDaysNumber * selectedVehicle.pricePerDay)
@@ -528,7 +511,7 @@ function mainHtmlDetailsInject(){
 }
     
 function lastHtmlDetailsInject(){
-        let finaldetailshtml = `<h5>Your Details</h5>
+        let html = `<h5>Your Details</h5>
     <p>${userName}</p>
     <p>${userDates}</p>
     <p>${userDaysNumber} day(s)</p>
@@ -541,12 +524,28 @@ function lastHtmlDetailsInject(){
     <p>Estimated Fuel Consumption: ${estimatedFuel}L</p>`
 
         $("#start-total-calc").click(function(){
-        $('#last-details').html(finaldetailshtml)
+        $('#last-details').html(html)
     })}
 
+    function finalHtmlDetailsInject(){
+        let html = `<h5>Thanks ${userName}!</h5>
+    <p>Further information has been sent to ${userEmail}</p>
+    <h5>Your Booking Details</h5>
+    <p>${userDates}</p>
+    <p>${userDaysNumber} day(s)</p>
+    <p>Number of People: ${userParty}</p>
+    <p>Start: ${startLocation}</p>
+    <p>End: ${endLocation}</p>
+    <h5>Your Vehicle</h5>
+    <p>${selectedVehicle.type}: $${selectedVehicle.pricePerDay} <span>(per day)</span></p>
+    <p>Rental Cost: $${rentalCost}</p>
+    <p>Estimated Fuel Consumption: ${estimatedFuel}L</p>`
 
+        $("#submit-button").click(function(){
+        $('#final-details').html(html)
+    })}
 
-    const paymentForm = document.querySelector('form');
+    const paymentForm = document.querySelector('#payment-form');
 
     const cardNumberInput = document.querySelector("#input-cardnumber");
     const cardNumberErrorMessage = document.querySelector("#cardnumber-error-message");
@@ -556,6 +555,7 @@ function lastHtmlDetailsInject(){
     const expDateErrorMessage = document.querySelector("#expdate-error-message");
     expDateErrorMessage.style.display = "none";
     
+    const cardNameInput = document.querySelector("#input-cardname");
     const cvcInput = document.querySelector("#input-cvc");
     const cvcErrorMessage = document.querySelector("#cvc-error-message");
     cvcErrorMessage.style.display = "none";
@@ -569,12 +569,21 @@ function lastHtmlDetailsInject(){
         checkCardNumber();
         checkExpDate();
         checkCvc();
+        
         if (hasError) {
             console.log("error");
         } else {
             console.log("no error");
-            form.submit();
+
+            cardNumberInput.value = ''
+            cardNameInput.value = ''
+            expDateInput.value = ''
+            cvcInput.value = ''
+            window.location ="#booking-confirmation-page"
+            
+
         }
+        
     }
     
     function checkCardNumber() {
@@ -583,11 +592,11 @@ function lastHtmlDetailsInject(){
             cardNumberErrorMessage.style.display = "inline"; 
             hasError = true; 
         } else {
-            cardNumberErrorMessage.style.display = "none"; 
-    
+            cardNumberErrorMessage.style.display = "none";
         }
     }
     
+  
     
     function checkExpDate() {
         const expRegex = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/;
@@ -598,7 +607,7 @@ function lastHtmlDetailsInject(){
             expDateErrorMessage.style.display = "none";
         }
     }
-    
+
     
     function checkCvc() {
         const cvcRegex = /^[0-9]{3,4}$/;
@@ -609,6 +618,7 @@ function lastHtmlDetailsInject(){
             cvcErrorMessage.style.display = "none";
         }
     }
+   
     
     
     
@@ -620,6 +630,7 @@ function lastHtmlDetailsInject(){
     
     
     
+
 
 
 init();
